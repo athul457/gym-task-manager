@@ -7,6 +7,7 @@ import { Header } from "./Header";
 function App() {
   const [task, setTask] = useState({
     description: "",
+    completed: false,
   });
 
   const [itemArray, setItemArray] = useState([]);
@@ -28,6 +29,27 @@ function App() {
       description: "",
     });
   }
+
+  // function handleToggle(index) {
+  //   setItemArray((prevArray) =>
+  //     prevArray.map((newArray, ind) =>
+  //       ind === index
+  //         ? { ...newArray, completed: !newArray.completed }
+  //         : newArray
+  //     )
+  //   );
+  // }
+
+  function handleToggle(index) {
+    setItemArray((itemArray) =>
+      itemArray.map((newItemsArray, ind) =>
+        ind === index
+          ? { ...newItemsArray, completed: !newItemsArray.completed }
+          : newItemsArray
+      )
+    );
+  }
+
   return (
     <div className="bg-green-50 w-full h-screen flex justify-center ">
       <div className="bg-amber-200 w-[1050px] h-[650px] mt-10 border-0 rounded-xl shadow-lg shadow-amber-300">
@@ -37,21 +59,21 @@ function App() {
           task={task}
           handleOnchange={handleOnchange}
         />
-        <TaskList itemArray={itemArray} />
+        <TaskList itemArray={itemArray} handleToggle={handleToggle} />
         <Footer />
       </div>
     </div>
   );
 }
 
-function TaskList({ itemArray }) {
+function TaskList({ itemArray, handleToggle }) {
   return (
     <>
       <div className="list-none grid grid-cols-4 items-center justify-between gap-7  w-[700px] h-auto ml-45 mt-10 text-center">
         {itemArray.map((task, index) => (
           <ul>
             <li key={index} className="bg-red-500 p-2 text-xl">
-              <TaskItem task={task} />
+              <TaskItem task={task} handleToggle={handleToggle} index={index} />
             </li>
           </ul>
         ))}
@@ -60,14 +82,19 @@ function TaskList({ itemArray }) {
   );
 }
 
-function TaskItem({ task }) {
+function TaskItem({ task, handleToggle, index }) {
   return (
     <>
       <div>
-        {task.description}{" "}
+        <span className={task.completed ? "line-through" : ""}>
+          {task.description}
+        </span>
         <input
           type="checkbox"
           className="ml-2 scale-125 border-0 bg-amber-300 accent-amber-500"
+          value={index}
+          checked={task.completed}
+          onChange={() => handleToggle(index)}
         />
       </div>
     </>
