@@ -1,6 +1,7 @@
 export function Footer({ itemArray }) {
   const itemLength = itemArray.length;
   const completedTask = itemArray.filter((item) => item.completed).length;
+  const percentage = Math.round((completedTask / itemLength) * 100);
   return (
     <>
       <div className="">
@@ -8,7 +9,7 @@ export function Footer({ itemArray }) {
           you have <span className="text-red-500 text-2xl ">{itemLength}</span>{" "}
           task on your list , And{" "}
           <span className="text-red-500 text-2xl ">{completedTask}</span> where
-          completd
+          completd <span className="text-red-500 text-2xl">{percentage}</span> %
         </div>
       </div>
     </>
