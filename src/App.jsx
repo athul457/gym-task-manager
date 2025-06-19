@@ -11,6 +11,10 @@ function App() {
 
   const [itemArray, setItemArray] = useState([]);
 
+  function addTaskToItemArray(task) {
+    setItemArray((itemArray) => [...itemArray, task]);
+  }
+
   function handleOnchange(e) {
     const { name, value } = e.target;
     setTask((task) => ({ ...task, [name]: value }));
@@ -19,7 +23,7 @@ function App() {
   function handleSubmitForm(e) {
     e.preventDefault();
     if (!task.description) return;
-    setItemArray((itemArray) => [...itemArray, task]);
+    addTaskToItemArray(task);
     setTask({
       description: "",
     });
