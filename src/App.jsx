@@ -1,8 +1,9 @@
 import { useState } from "react";
 import "./index.css";
-import { Footer } from "./Footer";
-import { Form } from "./Form";
-import { Header } from "./Header";
+import { Footer } from "./components/Footer";
+import { Form } from "./components/Form";
+import { Header } from "./components/Header";
+import { TaskList } from "./components/TaskList";
 
 function App() {
   const [task, setTask] = useState({
@@ -50,6 +51,12 @@ function App() {
     );
   }
 
+  function handleItemDelete(index) {
+    setItemArray((prevTask) =>
+      prevTask.filter((newTask, ind) => ind !== index)
+    );
+  }
+
   return (
     <div className="bg-green-50 w-full h-screen flex justify-center ">
       <div className="bg-amber-200 w-[1050px] h-[650px] mt-10 border-0 rounded-xl shadow-lg shadow-amber-300">
@@ -59,45 +66,15 @@ function App() {
           task={task}
           handleOnchange={handleOnchange}
         />
-        <TaskList itemArray={itemArray} handleToggle={handleToggle} />
-        <Footer />
+        <TaskList
+          itemArray={itemArray}
+          handleToggle={handleToggle}
+          handleItemDelete={handleItemDelete}
+        />
+        <Footer itemArray={itemArray} />
       </div>
     </div>
   );
 }
 
-function TaskList({ itemArray, handleToggle }) {
-  return (
-    <>
-      <div className="list-none grid grid-cols-4 items-center justify-between gap-7  w-[700px] h-auto ml-45 mt-10 text-center">
-        {itemArray.map((task, index) => (
-          <ul>
-            <li key={index} className="bg-red-500 p-2 text-xl">
-              <TaskItem task={task} handleToggle={handleToggle} index={index} />
-            </li>
-          </ul>
-        ))}
-      </div>
-    </>
-  );
-}
-
-function TaskItem({ task, handleToggle, index }) {
-  return (
-    <>
-      <div>
-        <span className={task.completed ? "line-through" : ""}>
-          {task.description}
-        </span>
-        <input
-          type="checkbox"
-          className="ml-2 scale-125 border-0 bg-amber-300 accent-amber-500"
-          value={index}
-          checked={task.completed}
-          onChange={() => handleToggle(index)}
-        />
-      </div>
-    </>
-  );
-}
 export default App;
