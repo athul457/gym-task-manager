@@ -12,6 +12,12 @@ function App() {
 
   const [itemArray, setItemArray] = useState([]);
 
+  function handleDeleteButton(index) {
+    setItemArray((prevItem) =>
+      prevItem.filter((newItem, ind) => ind !== index)
+    );
+  }
+
   function handleCompleted(index) {
     setItemArray((prevItem) =>
       prevItem.map((newItem, i) =>
@@ -42,24 +48,29 @@ function App() {
           task={task}
           handleOnchange={handleOnchange}
         />
-        <TaskList itemArray={itemArray} handleCompleted={handleCompleted} />
-        <Footer />
+        <TaskList
+          itemArray={itemArray}
+          handleCompleted={handleCompleted}
+          handleDeleteButton={handleDeleteButton}
+        />
+        <Footer itemArray={itemArray} />
       </div>
     </div>
   );
 }
 
-function TaskList({ itemArray, handleCompleted }) {
+function TaskList({ itemArray, handleCompleted, handleDeleteButton }) {
   return (
     <>
       <div className="list-none grid grid-cols-4 items-center justify-between gap-7  w-[700px] h-auto ml-45 mt-10 text-center">
         {itemArray.map((task, index) => (
           <ul>
-            <li key={index} className="bg-red-500 p-2 text-xl">
+            <li key={index} className="bg-red-200 p-2 text-xl rounded-lg">
               <TaskItem
                 task={task}
                 handleCompleted={handleCompleted}
                 index={index}
+                handleDeleteButton={handleDeleteButton}
               />
             </li>
           </ul>
@@ -69,20 +80,24 @@ function TaskList({ itemArray, handleCompleted }) {
   );
 }
 
-function TaskItem({ task, handleCompleted, index }) {
+function TaskItem({ task, handleCompleted, index, handleDeleteButton }) {
   return (
     <>
       <div>
         <input
           type="checkbox"
+          checked={task.completed}
           className="mr-2 scale-125 border-0 bg-amber-300 accent-amber-500"
-          onClick={handleCompleted}
+          onClick={() => handleCompleted(index)}
         />
         {
           <span className={task.completed ? "line-through" : ""}>
             {task.description}
           </span>
         }
+        <button className="ml-4" onClick={() => handleDeleteButton(index)}>
+          <i class="fa-solid fa-trash"></i>
+        </button>
       </div>
     </>
   );
